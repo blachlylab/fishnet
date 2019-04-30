@@ -4,7 +4,7 @@ import dhtslib.sam;
 import std.getopt;
 import std.array:array;
 import std.file:dirEntries,SpanMode;
-import std.algorithm:each,map;
+import std.algorithm:each,map,sort;
 import std.algorithm.setops:setIntersection;
 
 string[] tmp_read_names;
@@ -28,12 +28,12 @@ void main(string[] args)
 	foreach(fn; dirEntries(args[1],SpanMode.depth)) {
 		parse_fast5_names(fn);
 	}
-	tmp_read_names=setIntersection(read_names2fileindex.keys,parse_bam_reads(args[2])).array;
+	tmp_read_names=setIntersection(read_names2fileindex.keys.sort.array,parse_bam_reads(args[2])).array;
 	writeln(tmp_read_names);
 }
 
 void parse_fast5_names(string fn){
-	auto id=H5F.open(fn,H5F_ACC_RDWR,H5P_DEFAULT);
+	auto id=H5F.open(fn,H5F_ACC_RDONLY,H5P_DEFAULT);
 	H5L.iterate(id, H5Index.Name, H5IterOrder.Inc, &get_object_names);
 	tmp_read_names.each!(x=>read_names2fileindex[x]=filenames.length);
 	tmp_read_names=[];
@@ -49,5 +49,5 @@ extern(C) static herr_t get_object_names(hid_t loc_id, const char *name, const H
 }
 
 string[] parse_bam_reads(string fn){
-	return SAMFile(fn).all_records.map!(x=>x.queryName.idup).array;
+	return SAMFile(fn).all_records.map!(x=>"read_"~x.queryName.idup).array.sort.array;
 }
