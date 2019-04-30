@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+fast5catcher.so
+fast5catcher.dylib
+fast5catcher.dll
+fast5catcher.a
+fast5catcher.lib
+fast5catcher-test-*
+*.exe
+*.o
+*.obj
+*.lst

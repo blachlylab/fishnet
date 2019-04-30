@@ -1,0 +1,18 @@
+{
+	"description": "A minimal D application.",
+	"dependencies": {
+		"d_hdf5": {
+			"path":"d_hdf5"
+		},
+		"dhtslib":{
+			"path": "../dhtslib"
+		}
+	},
+	"authors": [
+		"Charles Gregory"
+	],
+	"sourceFiles": ["hdf5-1.8.15-patch1/bin/libhdf5.a"],
+	"copyright": "Copyright © 2019, Charles Gregory",
+	"license": "MIT",
+	"name": "fast5catcher"
+}
