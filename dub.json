@@ -5,7 +5,7 @@
 			"path":"d_hdf5"
 		},
 		"dhtslib":{
-			"path": "../dhtslib"
+			"path": "dhtslib"
 		}
 	},
 	"authors": [
@@ -14,5 +14,19 @@
 	"sourceFiles": ["hdf5-1.8.15-patch1/bin/libhdf5.a"],
 	"copyright": "Copyright © 2019, Charles Gregory",
 	"license": "MIT",
-	"name": "fast5catcher"
+	"name": "fast5catcher",
+	"configurations": [
+        {
+            "name": "shared",
+            "targetType": "executable"
+        },
+        {
+            "name": "static",
+            "targetType": "executable",
+            "subConfigurations": {
+                "dhtslib": "source-static"
+			},
+			"sourceFiles": ["hdf5-1.8.15-patch1/bin/libhdf5.a","dhtslib/htslib/libhts.a","/usr/lib/x86_64-linux-gnu/liblzma.a","/usr/lib/x86_64-linux-gnu/libbz2.a"]
+        }
+    ]
 }
