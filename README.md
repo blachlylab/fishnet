@@ -1,11 +1,13 @@
-## fast5catcher
+## fishnet
 
 ### Motivation
 Nanopore has moved to a multi-fast5 format for storing nanpore signal.
 This provided a much needed improvement in I/O as the previous single-fast5 method
 created a large number of very small files. However, now isolating read signal based on 
 read mappability, quality, or region is now more diffcult requiring the conversion from 
-multi to single fast5, then filtering, then converting back to a multi-fast5.
+multi to single fast5, then filtering, then converting back to a multi-fast5. fishnet takes a 
+filtered input BAM file and a directory of fast5s and outputs fast5s containing reads 
+that were found in the BAM file.
 
 ### Install
 We have prebuilt binaries for debian systems under releases.
