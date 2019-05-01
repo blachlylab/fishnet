@@ -1,5 +1,4 @@
-
-all:dub
+all: dub
 
 dhtslib/htslib/hts.c:
 	git submodule init

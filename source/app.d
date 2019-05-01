@@ -22,7 +22,7 @@ void main(string[] args)
 	GetoptResult res;
 	try {
 		res = getopt(args, std.getopt.config.bundling,
-		"bam|b","Input filtered read file is a bam file.",&bam,
+		// "bam|b","Input filtered read file is a bam file.",&bam,
 		"readlimit|l","number of reads per output fast5. Default:4000",&readlimit);
 	} catch (GetOptException e){
 		stderr.writeln(e.msg);
