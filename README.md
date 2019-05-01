@@ -12,12 +12,12 @@ that were found in the BAM file.
 ### Install
 We have prebuilt binaries for debian systems under releases.
 
-Or if you prefer you can build fast5catcher. 
+Or if you prefer you can build fishnet. 
 You must have dub installed and have htslib minimum requirements installed.
 
 ```
-git clone https://github.com/blachlylab/fast5catcher.git
-cd fast5catcher
+git clone https://github.com/blachlylab/fishnet.git
+cd fishnet
 make
 ```
 
@@ -28,10 +28,10 @@ It will extract the reads present in the bam file from the fast5 input directory
 The default number of reads per output file is 4000 reads.
 
 ```
-fast5catcher usage: ./fast5catcher [options] [fast5 dir] [input bam/fastq] [output dir]
+fishnet usage: ./fishnet [options] [fast5 dir] [input bam/fastq] [output dir]
 -b       --bam Input filtered read file is a bam file.
 -l --readlimit number of reads per output fast5. Default:4000
 -h      --help This help information.
 
-./fast5catcher -l 5000 fast5_dir/ test.bam out_dir/
+./fishnet -l 5000 fast5_dir/ test.bam out_dir/
 ```
