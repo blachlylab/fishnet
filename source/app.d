@@ -8,6 +8,7 @@ import std.algorithm:each,map,sort;
 import std.algorithm.setops:setIntersection;
 import std.conv:to;
 import std.file:mkdirRecurse;
+import std.path:extension;
 
 string[] tmp_read_names;
 string[] filenames;
@@ -42,6 +43,7 @@ void main(string[] args)
 
 	// get all readnames from fast5s
 	foreach(fn; dirEntries(args[1],SpanMode.depth)) {
+		if(extension(fn)!=".fast5") continue;
 		parse_fast5_names(fn);
 	}
 	stderr.writeln("[fishnet]: parsed fast5 read names");
