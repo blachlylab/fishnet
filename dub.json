@@ -14,7 +14,7 @@
 	"sourceFiles": ["hdf5-1.8.15-patch1/bin/libhdf5.a"],
 	"copyright": "Copyright © 2019, Charles Gregory",
 	"license": "MIT",
-	"name": "fast5catcher",
+	"name": "fishnet",
 	"configurations": [
         {
             "name": "shared",

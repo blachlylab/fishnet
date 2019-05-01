@@ -29,14 +29,14 @@ void main(string[] args)
 		stderr.writeln("-h or --help for usage.");
 	}
 	if(res.helpWanted){
-		defaultGetoptPrinter("fast5catcher usage: ./fast5catcher [options] [fast5 dir] [input bam/fastq] [output dir]",res.options);
+		defaultGetoptPrinter("fishnet usage: ./fishnet [options] [fast5 dir] [input bam/fastq] [output dir]",res.options);
 		return;
 	}else if(args.length==1){
-		defaultGetoptPrinter("fast5catcher usage: ./fast5catcher [options] [fast5 dir] [input bam/fastq] [output dir]",res.options);
+		defaultGetoptPrinter("fishnet usage: ./fishnet [options] [fast5 dir] [input bam/fastq] [output dir]",res.options);
 		return;
 	}else if(args.length!=4){
-		stderr.writeln("fast5catcher: Incorrect number of inputs!");
-		defaultGetoptPrinter("fast5catcher usage: ./fast5catcher [options] [fast5 dir] [input bam/fastq] [output dir]",res.options);
+		stderr.writeln("fishnet: Incorrect number of inputs!");
+		defaultGetoptPrinter("fishnet usage: ./fishnet [options] [fast5 dir] [input bam/fastq] [output dir]",res.options);
 		return;
 	}
 
@@ -44,12 +44,12 @@ void main(string[] args)
 	foreach(fn; dirEntries(args[1],SpanMode.depth)) {
 		parse_fast5_names(fn);
 	}
-	stderr.writeln("[fast5catcher]: parsed fast5 read names");
+	stderr.writeln("[fishnet]: parsed fast5 read names");
 
 	//intersect with bamfile read names
 	tmp_read_names=setIntersection(read_names2fileindex.keys.sort.array,parse_bam_reads(args[2])).array;
 
-	stderr.writeln("[fast5catcher]: intersected with filtered read name file");
+	stderr.writeln("[fishnet]: intersected with filtered read name file");
 
 	//make output dir and first output file
 	mkdirRecurse(args[3]);
@@ -65,7 +65,7 @@ void main(string[] args)
 	// readfiles.writeln;
 	string prev;
 	hid_t infile=-1;
-	stderr.writeln("[fast5catcher]: writing files");
+	stderr.writeln("[fishnet]: writing files");
 	foreach(read;tmp_read_names){
 
 		//if next origin file is different
