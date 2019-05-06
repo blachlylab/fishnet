@@ -1,7 +1,6 @@
 import std.stdio;
 import hdf5.hdf5;
 import dhtslib.sam;
-import snck:snck;
 import std.getopt;
 import std.array:array;
 import std.file:dirEntries,SpanMode;
@@ -10,6 +9,7 @@ import std.algorithm.setops:setIntersection;
 import std.conv:to;
 import std.file:mkdirRecurse;
 import std.path:extension;
+import progress;
 
 string[] tmp_read_names;
 string[] filenames;
@@ -19,6 +19,27 @@ int readlimit=4000;
 int readcount=0;
 hid_t outfile;
 int outfile_lab=0;
+string art = "
+  ______ _     _                _   
+ |  ____(_)   | |              | |  
+ | |__   _ ___| |__  _ __   ___| |_ 
+ |  __| | / __| '_ \| '_ \ / _ \ __|
+ | |    | \__ \ | | | | | |  __/ |_ 
+ |_|    |_|___/_| |_|_| |_|\___|\__|
+ 
+ o - - o - - o - - o - - o - - o
+  \   / \   / \   / \   / \   /
+   \ /   \ /   \ /   \ /   \ /
+    X     X ><> X     X     X
+   / \   / \   / \   / \   / \
+  /   \ /   \ /   \ /   \ /   \
+ X     X ><> X     X     X ><> X
+  \   / \   / \   / \   / \   /
+   \ /   \ /   \ /   \ /   \ /
+    X ><> X     X ><> X     X
+   / \   / \   / \   / \   / \
+  /   \ /   \ /   \ /   \ /   \
+";
 void main(string[] args)
 {
 	GetoptResult res;
@@ -45,11 +66,18 @@ void main(string[] args)
 
 	// get all readnames from fast5s
 	stderr.writeln("[fishnet]: parsing fast5 read names");
-	foreach(fn; dirEntries(args[1],SpanMode.depth).array.snck) {
+	auto files=dirEntries(args[1],SpanMode.depth).array;
+	auto b = new ChangingBar();
+	b.bar_prefix="[fishnet]: Casting nets |";
+
+	b.rotate_fill=["X"];
+	b.max=files.length;
+	foreach(fn; files) {
 		if(extension(fn)!=".fast5") continue;
 		parse_fast5_names(fn);
+		b.next;
 	}
-	writeln;
+	b.finish;
 
 	//intersect with bamfile read names
 	tmp_read_names=setIntersection(read_names2fileindex.keys.sort.array,parse_bam_reads(args[2])).array;
@@ -71,7 +99,12 @@ void main(string[] args)
 	string prev;
 	hid_t infile=-1;
 	stderr.writeln("[fishnet]: writing reads to output files");
-	foreach(read;tmp_read_names.snck){
+	b= new ChangingBar();
+	b.bar_prefix="[fishnet]: Reeling in catch |";
+	b.rotate_fill=["<",">","<"," "];
+	b.empty_fill="X";
+	b.max=tmp_read_names.length;
+	foreach(read;tmp_read_names){
 
 		//if next origin file is different
 		if(prev!=readfiles.front){
@@ -90,7 +123,9 @@ void main(string[] args)
 		prev=readfiles.front;
 		readfiles.popFront;
 		readcount++;
+		b.next;
 	}
+	b.finish;
 }
 
 /**
@@ -142,4 +177,64 @@ hid_t verify_file_limit(hid_t cur,string dir){
  */
 void copyReadData(string read,hid_t from, hid_t to){
 	H5O.copy(from,"/"~read,to,"/"~read,H5P_DEFAULT,H5P_DEFAULT);
+}
+
+enum HIDE_CURSOR = "\x1b[?25l";
+import std.array : back, join;
+import std.conv : to;
+import std.format : format;
+class ChangingBar : Progress
+{
+    size_t width = 32;
+    string delegate() suffix;
+    string bar_prefix;
+    string bar_suffix;
+    string empty_fill;
+	string[] rotate_fill;
+	int i;
+	string[] bar;
+    this()
+    {
+        width = 32;
+        bar_prefix = " |";
+        bar_suffix = "| ";
+        empty_fill = " ";
+        rotate_fill = ["#"];
+        hide_cursor = true;
+        this.message = { return ""; };
+        this.suffix = { return format("%s/%s", this.index, this.max); };
+        if (hide_cursor)
+            file.write(HIDE_CURSOR);
+    }
+
+    override void force_update()
+    {
+        size_t filled_length = cast(size_t)(this.width * this.progress);
+        size_t empty_length = this.width - filled_length;
+        string message = this.message();
+        string bar = fill(filled_length);
+        string empty = repeat(this.empty_fill, empty_length);
+        string suffix = this.suffix();
+        string line = [message, this.bar_prefix, bar, empty, this.bar_suffix, suffix].join("");
+        this.writeln(line);
+		i++;
+    }
+
+	string fill(size_t n){
+		string result;
+		foreach (i; 0 .. n)
+		{
+			result ~= rotate_fill[i % $];
+		}
+		return result;
+	}
+	string repeat(string s, size_t n)
+	{
+		string result;
+		foreach (i; 0 .. n)
+		{
+			result ~= s;
+		}
+		return result;
+	}
 }

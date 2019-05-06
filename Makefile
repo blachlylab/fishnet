@@ -1,4 +1,6 @@
-all: dub
+all: dub-release
+
+dev: dub-dev
 
 dhtslib/htslib/hts.c:
 	git submodule init
@@ -17,5 +19,8 @@ hdf5-1.8.15-patch1/README.txt: hdf5-1.8.15-patch1.tar.gz
 hdf5-1.8.15-patch1/bin/libhdf5.a: hdf5-1.8.15-patch1/README.txt
 	cd hdf5-1.8.15-patch1; cmake .;make -j 8
 
-dub: hdf5-1.8.15-patch1/bin/libhdf5.a dhtslib/htslib/libhts.a
+dub-release: hdf5-1.8.15-patch1/bin/libhdf5.a dhtslib/htslib/libhts.a
 	dub build --config static --build release
+
+dub-dev: hdf5-1.8.15-patch1/bin/libhdf5.a dhtslib/htslib/libhts.a
+	dub build --config static

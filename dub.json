@@ -7,7 +7,7 @@
 		"dhtslib":{
 			"path": "dhtslib"
 		},
-		"snck": "~>0.0.4"
+		"progress": "~>5.0.1"
 	},
 	"authors": [
 		"Charles Gregory"
