@@ -1,5 +1,22 @@
 ## fishnet
 
+```  ______ _     _                _   
+ |  ____(_)   | |              | |  
+ | |__   _ ___| |__  _ __   ___| |_ 
+ |  __| | / __| '_ \| '_ \ / _ \ __|
+ | |    | \__ \ | | | | | |  __/ |_ 
+ |_|    |_|___/_| |_|_| |_|\___|\__|
+
+ o - - o - - o - - o - - o - - o
+  \   / \   / \   / \   / \   /
+   \ /   \ /   \ /   \ /   \ /
+    X     X     X ><> X     X
+   / \   / \   / \   / \   / \
+  /   \ /   \ /   \ /   \ /   \
+ X     X ><> X     X     X ><> X
+  \   / \   / \   / \   / \   /
+```
+
 ### Motivation
 Nanopore has moved to a multi-fast5 format for storing nanpore signal.
 This provided a much needed improvement in I/O as the previous single-fast5 method
