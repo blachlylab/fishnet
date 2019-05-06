@@ -19,27 +19,23 @@ int readlimit=4000;
 int readcount=0;
 hid_t outfile;
 int outfile_lab=0;
-string art = "
-  ______ _     _                _   
+string art = 
+`  ______ _     _                _   
  |  ____(_)   | |              | |  
  | |__   _ ___| |__  _ __   ___| |_ 
  |  __| | / __| '_ \| '_ \ / _ \ __|
  | |    | \__ \ | | | | | |  __/ |_ 
  |_|    |_|___/_| |_|_| |_|\___|\__|
- 
+
  o - - o - - o - - o - - o - - o
   \   / \   / \   / \   / \   /
    \ /   \ /   \ /   \ /   \ /
-    X     X ><> X     X     X
+    X     X     X ><> X     X
    / \   / \   / \   / \   / \
   /   \ /   \ /   \ /   \ /   \
  X     X ><> X     X     X ><> X
   \   / \   / \   / \   / \   /
-   \ /   \ /   \ /   \ /   \ /
-    X ><> X     X ><> X     X
-   / \   / \   / \   / \   / \
-  /   \ /   \ /   \ /   \ /   \
-";
+`;
 void main(string[] args)
 {
 	GetoptResult res;
@@ -52,12 +48,15 @@ void main(string[] args)
 		stderr.writeln("-h or --help for usage.");
 	}
 	if(res.helpWanted){
+		stderr.writeln(art);
 		defaultGetoptPrinter("fishnet usage: ./fishnet [options] [fast5 dir] [input bam/fastq] [output dir]",res.options);
 		return;
 	}else if(args.length==1){
+		stderr.writeln(art);
 		defaultGetoptPrinter("fishnet usage: ./fishnet [options] [fast5 dir] [input bam/fastq] [output dir]",res.options);
 		return;
 	}else if(args.length!=4){
+		stderr.writeln(art);
 		stderr.writeln("fishnet: Incorrect number of inputs!");
 		defaultGetoptPrinter("fishnet usage: ./fishnet [options] [fast5 dir] [input bam/fastq] [output dir]",res.options);
 		return;
@@ -68,7 +67,7 @@ void main(string[] args)
 	stderr.writeln("[fishnet]: parsing fast5 read names");
 	auto files=dirEntries(args[1],SpanMode.depth).array;
 	auto b = new ChangingBar();
-	b.bar_prefix="[fishnet]: Casting nets |";
+	b.bar_prefix="[fishnet]: Casting net |";
 
 	b.rotate_fill=["X"];
 	b.max=files.length;
@@ -100,7 +99,7 @@ void main(string[] args)
 	hid_t infile=-1;
 	stderr.writeln("[fishnet]: writing reads to output files");
 	b= new ChangingBar();
-	b.bar_prefix="[fishnet]: Reeling in catch |";
+	b.bar_prefix="[fishnet]: Reeling in the catch |";
 	b.rotate_fill=["<",">","<"," "];
 	b.empty_fill="X";
 	b.max=tmp_read_names.length;
@@ -200,7 +199,6 @@ class ChangingBar : Progress
         bar_suffix = "| ";
         empty_fill = " ";
         rotate_fill = ["#"];
-        hide_cursor = true;
         this.message = { return ""; };
         this.suffix = { return format("%s/%s", this.index, this.max); };
         if (hide_cursor)
