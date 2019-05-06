@@ -1,6 +1,7 @@
 import std.stdio;
 import hdf5.hdf5;
 import dhtslib.sam;
+import snck:snck;
 import std.getopt;
 import std.array:array;
 import std.file:dirEntries,SpanMode;
@@ -41,12 +42,14 @@ void main(string[] args)
 		return;
 	}
 
+
 	// get all readnames from fast5s
-	foreach(fn; dirEntries(args[1],SpanMode.depth)) {
+	stderr.writeln("[fishnet]: parsing fast5 read names");
+	foreach(fn; dirEntries(args[1],SpanMode.depth).array.snck) {
 		if(extension(fn)!=".fast5") continue;
 		parse_fast5_names(fn);
 	}
-	stderr.writeln("[fishnet]: parsed fast5 read names");
+	writeln;
 
 	//intersect with bamfile read names
 	tmp_read_names=setIntersection(read_names2fileindex.keys.sort.array,parse_bam_reads(args[2])).array;
@@ -67,8 +70,8 @@ void main(string[] args)
 	// readfiles.writeln;
 	string prev;
 	hid_t infile=-1;
-	stderr.writeln("[fishnet]: writing files");
-	foreach(read;tmp_read_names){
+	stderr.writeln("[fishnet]: writing reads to output files");
+	foreach(read;tmp_read_names.snck){
 
 		//if next origin file is different
 		if(prev!=readfiles.front){

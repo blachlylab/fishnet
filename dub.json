@@ -6,7 +6,8 @@
 		},
 		"dhtslib":{
 			"path": "dhtslib"
-		}
+		},
+		"snck": "~>0.0.4"
 	},
 	"authors": [
 		"Charles Gregory"
