@@ -2,13 +2,14 @@ import std.stdio;
 import hdf5.hdf5;
 import dhtslib.sam;
 import std.getopt;
-import std.array:array;
-import std.file:dirEntries,SpanMode;
-import std.algorithm:each,map,sort;
-import std.algorithm.setops:setIntersection;
-import std.conv:to;
-import std.file:mkdirRecurse;
-import std.path:extension;
+import std.array : array;
+import std.file : dirEntries,SpanMode;
+import std.algorithm : each, map, sort;
+import std.algorithm.setops : setIntersection;
+import std.conv : to;
+import std.file : mkdirRecurse;
+import std.path : extension;
+import core.stdc.stdlib : exit;
 import progress;
 
 string[] tmp_read_names;
@@ -78,8 +79,14 @@ void main(string[] args)
     }
     b.finish;
 
+    auto bam_read_names = parse_bam_reads(args[2]);
+    if(bam_read_names.length == 0){
+        stderr.writeln("[fishnet]: Error: Your bam file appears to have no reads. Exiting");
+        exit(1);
+    }
+
     //intersect with bamfile read names
-    tmp_read_names=setIntersection(read_names2fileindex.keys.sort.array,parse_bam_reads(args[2])).array;
+    tmp_read_names=setIntersection(read_names2fileindex.keys.sort.array,bam_read_names).array;
 
     stderr.writeln("[fishnet]: intersected with filtered read name file");
 
