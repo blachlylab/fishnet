@@ -18,19 +18,20 @@
 ```
 
 ### Motivation
-Nanopore has moved to a multi-fast5 format for storing nanpore signal.
-This provided a much needed improvement in I/O as the previous single-fast5 method
-created a large number of very small files. However, now isolating read signal based on 
-read mappability, quality, or region is now more diffcult requiring the conversion from 
-multi to single fast5, then filtering, then converting back to a multi-fast5. fishnet takes a 
-filtered input BAM file and a directory of fast5s and outputs fast5s containing reads 
+Oxford Nanopore signals are stored in a multi-fast5 format, with each fast5 having many distinct reads.
+The change from single fast5-file-per-read provided a much needed improvement in I/O,
+as the previous single-fast5 method created a large number of very small files.
+
+However, isolating read signal based on read mappability, quality, or region is now more diffcult
+requiring the conversion from multi to single fast5, then filtering, then converting back to a multi-fast5.
+fishnet takes a filtered input BAM file and a directory of fast5s and outputs fast5s containing reads 
 that were found in the BAM file.
 
 ### Install
-We have prebuilt binaries for debian systems under releases.
+We have prebuilt binaries for Debian linux derived (e.g. Ubuntu, etc.) systems under releases.
 
-Or if you prefer you can build fishnet. 
-You must have dub installed and have htslib minimum requirements installed.
+Or if you prefer, you can build fishnet from source.
+You must have a Dlang toolchain including dub installed, and have htslib minimum requirements installed.
 
 ```
 git clone https://github.com/blachlylab/fishnet.git
@@ -40,7 +41,7 @@ make
 
 ### Usage
 
-Currently only works with bam files  and the multi-fast5 format. Input directory must contain only fast5s.
+Currently only works with bam files and the multi-fast5 format. Input directory must contain only fast5s.
 It will extract the reads present in the bam file from the fast5 input directory and write them to the output directory.
 The default number of reads per output file is 4000 reads.
 
